@@ -27,7 +27,7 @@
 
       <form action="validar-login.php" method="post">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="E-mail" name="senha">
+          <input type="email" class="form-control" placeholder="E-mail" name="email">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input required type="password" class="form-control" placeholder="Senha">
+          <input required type="password" class="form-control" placeholder="Senha" name="senha">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>

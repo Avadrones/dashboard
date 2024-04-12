@@ -10,58 +10,58 @@ if ($_POST) {
     if (empty($_POST["email"]) || empty($_POST["senha"])) {
         $_SESSION["msg"] = "Por favor, preencha os campos obrigatórios!";
         $_SESSION["tipo"] = "warning";
+        $_SESSION["title"] = "Ops!";
         
       header("Location: login.php");
         exit;
     } else {
-        include('conexao_mysqli.php');
+        include('conexao-pdo.php');
         // RECUPERAR INFORMAÇÕES DO FORMULÁRIO LOGIN
         $email = trim($_POST["email"]);
         $senha = trim($_POST["senha"]);
 
+
         // MONTAR SINTAXE SQL PARA CONSULTAR NO BANCO DE DADOS
-        $sql = "
+        $stmt = $conn->prepare("
         SELECT 
             pk_usuario , nome
         FROM 
             usuarios
         WHERE 
-            email LIKE '$email'
-            AND senha LIKE '$senha'
-        ";
+            email LIKE :email
+            AND senha LIKE :senha
+        ");
 
-        $query = mysqli_query($conn, $sql);
+        $stmt->bindParam(':email',$email);
+        $stmt->bindParam(':senha',$senha);
 
-        // VERIFICAR SE ENCONTROU ALGUM REGISTRO NA TABELA
-        if(mysqli_num_rows($query) > 0) {
+        $stmt->execute();
 
-            // ORGANIZA OS DADOS DO BANCO COMO OBJETOS NA VARIÁVEL $ROW
-            $row = mysqli_fetch_object($query);
+         // VERIFICAR SE ENCONTROU ALGUM REGISTRO NA TABELA
+        if ($stmt->rowcount() > 0) {
+         // ORGANIZA OS DADOS DO BANCO COMO OBJETOS NA VARIÁVEL $ROW
+         $row = $stmt->fetch(PDO::FETCH_OBJ);
 
-            // CRIAR SESSÃO PARA VARIÁVEL GLOBAL
-            session_start();
-
-            // DECLARO VARIÁVEL GLOBAL INFORMANDO QUE USUÁRIO
+         // DECLARO VARIÁVEL GLOBAL INFORMANDO QUE USUÁRIO
             // ESTÁ AUTENTICADO CORRETAMENTE
             $_SESSION["autenticado"] = true;
             $_SESSION["pk_usuario"] = $row->pk_usuario;
             $_SESSION["nome_usuario"] = $row->nome;
             $_SESSION["tempo_login"] = time();
 
-            header('Location: ./crud_mysqli');
+            header('Location: ./');
             exit;
         } else {
-            echo "
-            <script>
-                alert('E-mail e/ou senha inválidos!');
-                window.location='./tela_login.php';
-            </script>
-            ";
+            $_SESSION["title"] = 'Ops!';
+            $_SESSION["msg"] = 'E-mail e/ou senha inválidos!';
+            $_SESSION["tipo"] = 'error';
+            
+            header('Location: ./login.php');
             exit;        
         }
 
     }
 } else {
-    header('Location: ./tela_login.php');
+    header('Location: ./login.php');
     exit;
 }

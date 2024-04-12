@@ -7,24 +7,23 @@ if ($_SESSION["autenticado"] != true) {
     // DESTRUIR QUALQUER SESSÃO EXISTENTE
     session_destroy();
 
-    header("Location: ../tela_login.php");
+    header("Location: ./login.php");
     exit;
 } else {
 
-    $tempo_limite = 300; // SEGUNDOS
+    $tempo_limite = 3; // SEGUNDOS
     $tempo_atual = time();
 
     // VERIFICAR TEMPO INATIVO DO USUÁRIO
     if (($tempo_atual - $_SESSION["tempo_login"]) > $tempo_limite) {
-        // DESTRUIR QUALQUER SESSÃO EXISTENTE
-        session_destroy();
 
-        echo "
-        <script>
-            alert('Tempo de sessão esgotado!');
-            window.location='../tela_login.php';
-        </script>
-        ";
+        // DESTRUIR QUALQUER SESSÃO EXISTENTE
+
+        $_SESSION["tipo"] = "warning";
+        $_SESSION["tipo"] = "Ops"; 
+        $_SESSION["tipo"] = "Tempo de sessão esgotado!";
+
+      header("Location: .login.php");
         exit;
     } else {
         $_SESSION["tempo_login"] = time();
