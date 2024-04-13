@@ -46,7 +46,11 @@ if ($_POST) {
             // ESTÁ AUTENTICADO CORRETAMENTE
             $_SESSION["autenticado"] = true;
             $_SESSION["pk_usuario"] = $row->pk_usuario;
-            $_SESSION["nome_usuario"] = $row->nome;
+
+            // TRANFORMA STRING EM ARRAY, AONDE TIVER ESPAÇO
+            $nome_usuario = explode(" ", $row->nome);
+            // CONCATENA O PRIMEIRO NOME COM O SOBRENOME DO USUARIO
+            $_SESSION["nome_usuario"] = $nome_usuario[0] ." " . end($nome_usuario);
             $_SESSION["tempo_login"] = time();
 
             header('Location: ./');
