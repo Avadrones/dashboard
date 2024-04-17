@@ -19,6 +19,8 @@ if ($_POST) {
         // RECUPERAR INFORMAÇÕES DO FORMULÁRIO LOGIN
         $email = trim($_POST["email"]);
         $senha = trim($_POST["senha"]);
+        $remember = ($_POST["remember"]) ?? "off";
+
 
 
         // MONTAR SINTAXE SQL PARA CONSULTAR NO BANCO DE DADOS
@@ -39,6 +41,18 @@ if ($_POST) {
 
          // VERIFICAR SE ENCONTROU ALGUM REGISTRO NA TABELA
         if ($stmt->rowcount() > 0) {
+            // VERIFICA SE O BOTÃO LEMBRAR DE MIN ESTA ATIVADO
+            if($remember == "on"){
+                // CRIA UM COOKIE NO NAVEGADOR SALVANDO OS DADOS DE ACESSO
+                setcookie("email", $email);
+                setcookie("senha", $senha);
+            }else {
+                // EXCLUIR COM DADOS DE ACESSO
+                setcookie("email");
+                setcookie("senha");
+            }
+
+
          // ORGANIZA OS DADOS DO BANCO COMO OBJETOS NA VARIÁVEL $ROW
          $row = $stmt->fetch(PDO::FETCH_OBJ);
 

@@ -1,3 +1,17 @@
+<?php
+//VERIFICA SE EXISTE COOKIE CRIADO PARA PREENCHIMENTO DOS DADOS DE ACESSO
+if(empty($_COOKIE["email"]) || empty($_COOKIE["senha"])) {
+  $checked = "";
+  $email = "";
+  $senha = "";
+} else {
+  $checked = "checked ";
+  $email = $_COOKIE["email"];
+  $senha = $_COOKIE["senha"];
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -27,7 +41,7 @@
 
       <form action="validar-login.php" method="post">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="E-mail" name="email">
+          <input value="<?php echo $email;?>" required type="email" class="form-control" placeholder="E-mail" name="email">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -35,7 +49,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input required type="password" class="form-control" placeholder="Senha" name="senha">
+          <input value="<?php echo $senha;?>" required type="password" class="form-control" placeholder="Senha" name="senha">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -45,7 +59,7 @@
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
-              <input type="checkbox" id="remember" name="remember">
+              <input <?php echo $checked;?> type="checkbox" id="remember" name="remember">
               <label for="remember">
                 Lembrar-me
               </label>

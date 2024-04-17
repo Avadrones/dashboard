@@ -1,6 +1,6 @@
 <?php
-include('verificar-autenticidade.php');
-include('conexao-pdo.php');
+include('../verificar-autenticidade.php');
+include('../conexao-pdo.php');
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -13,28 +13,28 @@ include('conexao-pdo.php');
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="dist/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="../dist/plugins/fontawesome-free/css/all.min.css">
   <!-- bootstrap -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="dist/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <link rel="stylesheet" href="../dist/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
   <!-- iCheck -->
   <link rel="stylesheet" href="dist/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="../dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="dist/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <link rel="stylesheet" href="../dist/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
 
     <!-- Navbar -->
-    <?php include("nav.php"); ?>
+    <?php include("../nav.php"); ?>
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
-    <?php include("aside.php"); ?>
+    <?php include("../aside.php"); ?>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -66,7 +66,7 @@ include('conexao-pdo.php');
                 <div class="icon">
                   <i class="bi bi-cash-coin"></i>
                 </div>
-                <a href="./ordens-serviço" class="small-box-footer">Ver Todos <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="./ordens-serviço" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <!-- ./col -->
@@ -148,7 +148,7 @@ include('conexao-pdo.php');
       <!-- /.content -->
     </div>
     <!-- /. Footer -->
-    <?php include("footer.php"); ?>
+    <?php include("../footer.php"); ?>
 
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
@@ -159,10 +159,10 @@ include('conexao-pdo.php');
   <!-- ./wrapper -->
 
   <!-- jQuery -->
-  <script src="dist/plugins/jquery/jquery.min.js"></script>
+  <script src="../dist/plugins/jquery/jquery.min.js"></script>
 
   <!-- jQuery UI 1.11.4 -->
-  <script src="dist/plugins/jquery-ui/jquery-ui.min.js"></script>
+  <script src="../dist/plugins/jquery-ui/jquery-ui.min.js"></script>
 
   <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
   <script>
@@ -170,17 +170,17 @@ include('conexao-pdo.php');
   </script>
 
   <!-- Bootstrap 4 -->
-  <script src="dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- Tempusdominus Bootstrap 4 -->
-  <script src="dist/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+  <script src="../dist/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
   <!-- Summernote -->
-  <script src="dist/plugins/summernote/summernote-bs4.min.js"></script>
+  <script src="../dist/plugins/summernote/summernote-bs4.min.js"></script>
   <!-- overlayScrollbars -->
-  <script src="dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+  <script src="../dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
   <!-- ChartJS -->
-  <script src="dist/plugins/chart.js/Chart.min.js"></script>
+  <script src="../dist/plugins/chart.js/Chart.min.js"></script>
   <!-- AdminLTE App -->
-  <script src="dist/js/adminlte.js"></script>
+  <script src="../dist/js/adminlte.js"></script>
   <script>
 
     $(function() {
@@ -199,7 +199,7 @@ include('conexao-pdo.php');
           $("#asideMenu").attr("Class", "main-sidebar sidebar-dark-primary elevation-4");
         }
       });
-
+      
       var areaChartData = {
       labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [

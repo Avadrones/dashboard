@@ -2,6 +2,9 @@
 // INICIAR SESSÃO PARA TER ACESSO A VARIÁVEIS GLOBAIS
 session_start();
 
+// CAMINHO FIXO DO SOFTWARE WEB
+define("caminhoURL", "http://localhost/caetano/dashboard/");
+
 // VERIFICA SE O USUÁRIO NÃO ESTÁ CONECTADO
 if ($_SESSION["autenticado"] != true) {
     // DESTRUIR QUALQUER SESSÃO EXISTENTE
