@@ -22,9 +22,9 @@ if ($_SESSION["autenticado"] != true) {
 
         // DESTRUIR QUALQUER SESSÃO EXISTENTE
 
-        $_SESSION["tipo"] = "warning";
-        $_SESSION["tipo"] = "Ops"; 
-        $_SESSION["tipo"] = "Tempo de sessão esgotado!";
+        $_SESSION["title"] = "Ops";
+        $_SESSION["tipo"] = "warning"; 
+        $_SESSION["msg"] = "Tempo de sessão esgotado!";
 
       header("Location: ./login.php");
         exit;
