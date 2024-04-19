@@ -2,6 +2,8 @@
 
 session_start();
 
+var_dump($_SESSION);
+
 //ISSET = VERIFICA SE AS VARIAVEIS FORAM CRIADAS
 if  (isset($_SESSION["tipo"]) && isset($_SESSION["title"]) &&isset($_SESSION["msg"])) {
     echo "
