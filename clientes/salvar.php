@@ -6,7 +6,7 @@ include("../conexao-pdo.php");
 // VERIFICA SE ESTÁ VINDO INFORMAÇÕES VIA POST
 if ($_POST) {
     // VERIFICA CAMPOS OBRIGATóRIOS
-    if (empty(($_POST["servico"]))) {
+    if (empty(($_POST["nome"]))) {
         $_SESSION["tipo"] = 'warning';
         $_SESSION["title"] = 'ops';
         $_SESSION["msg"] = 'Por favor, preencha os campos obrigatórios.';
@@ -14,26 +14,32 @@ if ($_POST) {
         exit;
     } else {
         // RECUPERA INFORMAÇÕES PREENCHIDAS PELO USUARÍO
-        $pk_servico = trim($_POST["pk_servico"]);
-        $servico = trim($_POST["servico"]);
+        $pk_cliente = trim($_POST["pk_cliente"]);
+        $cliente = trim($_POST["cliente"]);
+        $CPF = trim($_POST["CPF"]);
+        $whatsapp = trim($_POST["whatsapp"]);
+        $email = trim($_POST["email"]);
 
         try {
-            if (empty($pk_servico)) {
+            if (empty($pk_cliente)) {
                 $sql = "
-            INSERT INTO servicos (servico) VALUES
-            (:servico)
+            INSERT INTO clientes (cliente, CPF, whatsapp, email) VALUES
+            (:cliente)
             ";
                 $stmt = $conn->prepare($sql);
-                $stmt->bindParam(':servico', $servico);
+                $stmt->bindParam(':cliente', $cliente);
             } else {
                 $sql = "
-            UPDATE servicos SET
-            servico = :servico
-            WHERE pk_servico = :pk_servico
+            UPDATE clientes SET
+            cliente = :cliente
+            CPF = :CPF
+            whatsapp = :whatsapp
+            email = :email
+            WHERE pk_cliente = :pk_cliente
             ";
                 $stmt = $conn->prepare($sql);
-                $stmt->bindParam(':pk_servico', $pk_servico);
-                $stmt->bindParam(':servico', $servico);
+                $stmt->bindParam(':pk_cliente', $pk_scliente);
+                $stmt->bindParam(':cliente', $cliente);
             }
             
             // EXECUTA O INSERT OU UPDATE ACIMA

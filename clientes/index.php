@@ -50,7 +50,7 @@ include('../conexao-pdo.php');
 
               <div class="card card-primary card-outline">
                 <div class="card-header">
-                  <h3 class="card-title">Lista de Serviços</h3>
+                  <h3 class="card-title">Lista de Clientes</h3>
                   <a href="./form.php" class="btn btn-sm btn-primary float-right rounded-circle">
                     <i class="bi bi-plus"></i>
                   </a>
@@ -60,16 +60,18 @@ include('../conexao-pdo.php');
                     <thead>
                       <tr>
                         <th>CÓD</th>
-                        <th>SERVIÇOS</th>
+                        <th>CLIENTE</th>
+                        <th>WHATSAPP</th>
+                        <th>EMAIL</th>
                         <th>OPÇÕES</th>
                       </tr>
                     </thead>
                     <tbody>
                       <?php
                       $sql = "
-                      SELECT pk_servico, servico
-                      FROM servicos
-                      ORDER BY servico
+                      SELECT pk_cliente, nome, whatsapp, email
+                      FROM clientes
+                      ORDER BY nome
                       ";
 
                        // PREPARA A SINTAXE NA CONEXÃO
@@ -82,8 +84,10 @@ include('../conexao-pdo.php');
                        foreach ($dados as $row) {
                        echo '
                        <tr>
-                        <td>'.$row->pk_servico.'</td>
-                        <td>'.$row->servico.'</td>
+                        <td>'.$row->pk_cliente.'</td>
+                        <td>'.$row->nome.'</td>
+                        <td>'.$row->whatsapp.'</td>
+                        <td>'.$row->email.'</td>
                         <td>
                           <div class="btn-group">
                             <button type="button" class="btn btn-default dropown-toggle
@@ -91,10 +95,10 @@ include('../conexao-pdo.php');
                               <i class="bi bi-tools"></i>
                             </button>
                             <div class="dropdown-menu" role="menu">
-                              <a class="dropdown-item" href="form.php?ref='.base64_encode($row->pk_servico).'">
+                              <a class="dropdown-item" href="form.php?ref='.base64_encode($row->pk_cliente).'">
                                 <i class="bi bi-pencil"></i>Editar
                               </a>
-                              <a class="dropdown-item" href="remover.php?ref='.base64_encode($row->pk_servico).'">
+                              <a class="dropdown-item" href="remover.php?ref='.base64_encode($row->pk_cliente).'">
                                 <i class="bi bi-trash" href="#"></i>Remover
                               </a>
                             </div>
