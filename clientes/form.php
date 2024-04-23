@@ -2,40 +2,40 @@
 include('../verificar-autenticidade.php');
 include('../conexao-pdo.php');
 
-    if(empty($_GET["ref"])) {
-        $pk_cliente = "";
-        $nome = "";
-        $CPF = "";
-        $whatsapp = "";
-        $email = "";
-    } else {
-        $pk_cliente = base64_decode(trim($_GET["ref"]));
-        $sql = "
+if (empty($_GET["ref"])) {
+    $pk_cliente = "";
+    $nome = "";
+    $CPF = "";
+    $whatsapp = "";
+    $email = "";
+} else {
+    $pk_cliente = base64_decode(trim($_GET["ref"]));
+    $sql = "
         SELECT pk_cliente, nome, CPF, whatsapp, email
         FROM clientes
         WHERE pk_cliente = :pk_cliente
         ";
-        // PREPARA A SINTAXE
-        $stmt = $conn->prepare($sql);
-        // SUBSTITUI A STRING PK_SERVIÇO PELA VARIAVEL PK_SERVIÇO
-        $stmt->bindParam(':pk_cliente',$pk_cliente);
-        // EXECUTA A SINTAXE FINAL MYSQL 
-        $stmt->execute();
-        // VERIFICA SE ENCONTROU ALGUM REGISTRO NO BANCO DE DADOS
-        if($stmt->rowCount() > 0) {
-            $dado = $stmt->fetch(PDO::FETCH_OBJ);
-            $nome = $dado->nome;
-            $CPF = $dado->CPF;
-            $whatsapp = $dado->whatsapp;
-            $email = $dado->email;
-        } else {
-            $_SESSION["tipo"] = 'error';
-            $_SESSION["title"] = 'ops';
-            $_SESSION["msg"] = 'Registro não encontrado';
-            header("lLocation: ./");
-            exit;
-        }
+    // PREPARA A SINTAXE
+    $stmt = $conn->prepare($sql);
+    // SUBSTITUI A STRING PK_SERVIÇO PELA VARIAVEL PK_SERVIÇO
+    $stmt->bindParam(':pk_cliente', $pk_cliente);
+    // EXECUTA A SINTAXE FINAL MYSQL 
+    $stmt->execute();
+    // VERIFICA SE ENCONTROU ALGUM REGISTRO NO BANCO DE DADOS
+    if ($stmt->rowCount() > 0) {
+        $dado = $stmt->fetch(PDO::FETCH_OBJ);
+        $nome = $dado->nome;
+        $CPF = $dado->CPF;
+        $whatsapp = $dado->whatsapp;
+        $email = $dado->email;
+    } else {
+        $_SESSION["tipo"] = 'error';
+        $_SESSION["title"] = 'ops';
+        $_SESSION["msg"] = 'Registro não encontrado';
+        header("lLocation: ./");
+        exit;
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -90,30 +90,32 @@ include('../conexao-pdo.php');
                                             <div class="col-1">
                                                 <label for="pk_cliente" class="form-label">Cód</label>
                                                 <input readonly type="text" class="form-control" id="pk_cliente" name="pk_cliente" value="<?php echo
-                                                $pk_cliente; ?>">
+                                                                                                                                            $pk_cliente; ?>">
                                             </div>
                                             <div class="col-4">
                                                 <label for="nome" class="form-label">NOME</label>
                                                 <input required type="text" class="form-control" id="nome" name="nome" value="<?php echo
-                                                $nome; ?>">
+                                                                                                                                $nome; ?>">
                                             </div>
                                             <div class="col-2">
                                                 <label for="nome" class="form-label">CPF</label>
                                                 <input required type="text" class="form-control" id="CPF" name="CPF" value="<?php echo
-                                                $CPF; ?>">
-                                        </div>
-                                        <div class="col-2">
+                                                                                                                            $CPF; ?>">
+                                            </div>
+                                            <div class="col-2">
                                                 <label for="nome" class="form-label">WHATSAPP</label>
                                                 <input required type="text" class="form-control" id="whatsapp" name="whatsapp" value="<?php echo
-                                                $whatsapp; ?>">
-                                        </div>
-                                        <div class="col-3">
+                                                                                                                                        $whatsapp; ?>">
+                                            </div>
+                                            <div class="col-3">
                                                 <label for="nome" class="form-label">EMAIL</label>
                                                 <input required type="text" class="form-control" id="email" name="email" value="<?php echo
-                                                $email; ?>">
+                                                                                                                                $email; ?>">
+                                            </div>
+                                        </div>
                                     </div>
                                     <!-- /.card-body -->
-                                    <div class="card-footer text-rigt">
+                                    <div class="card-footer text-right">
                                         <a href="./" class="btn btn-outline-danger rounded-circle">
                                             <i class="bi bi-arrow-left"></i>
                                         </a>

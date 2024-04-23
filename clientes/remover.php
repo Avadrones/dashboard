@@ -9,13 +9,13 @@ if(empty($_GET["ref"])) {
     $pk_cliente = base64_decode($_GET["ref"]);
 
     $sql = "
-    DELETE FROM cliente
+    DELETE FROM clientes
     WHERE pk_cliente = :pk_cliente
     ";
 
     try {
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':pk_servico', $pk_cliente);
+        $stmt->bindParam(':pk_cliente', $pk_cliente);
         $stmt->execute();
     
     $_SESSION["tipo"] = "success";

@@ -15,7 +15,7 @@ if ($_POST) {
     } else {
         // RECUPERA INFORMAÇÕES PREENCHIDAS PELO USUARÍO
         $pk_cliente = trim($_POST["pk_cliente"]);
-        $cliente = trim($_POST["cliente"]);
+        $nome = trim($_POST["nome"]);
         $CPF = trim($_POST["CPF"]);
         $whatsapp = trim($_POST["whatsapp"]);
         $email = trim($_POST["email"]);
@@ -23,23 +23,29 @@ if ($_POST) {
         try {
             if (empty($pk_cliente)) {
                 $sql = "
-            INSERT INTO clientes (cliente, CPF, whatsapp, email) VALUES
-            (:cliente)
-            ";
+                INSERT INTO clientes (nome, CPF, whatsapp, email) VALUES
+                (:nome, :CPF, :whatsapp, :email)
+                ";
                 $stmt = $conn->prepare($sql);
-                $stmt->bindParam(':cliente', $cliente);
+                $stmt->bindParam(':nome', $nome);
+                $stmt->bindParam(':CPF', $CPF);
+                $stmt->bindParam(':whatsapp', $whatsapp);
+                $stmt->bindParam(':email', $email);
             } else {
                 $sql = "
-            UPDATE clientes SET
-            cliente = :cliente
-            CPF = :CPF
-            whatsapp = :whatsapp
-            email = :email
-            WHERE pk_cliente = :pk_cliente
-            ";
+                UPDATE clientes SET
+                nome = :nome,
+                CPF = :CPF,
+                whatsapp = :whatsapp,
+                email = :email
+                WHERE pk_cliente = :pk_cliente
+                ";
                 $stmt = $conn->prepare($sql);
-                $stmt->bindParam(':pk_cliente', $pk_scliente);
-                $stmt->bindParam(':cliente', $cliente);
+                $stmt->bindParam(':pk_cliente', $pk_cliente);
+                $stmt->bindParam(':nome', $nome);
+                $stmt->bindParam(':CPF', $CPF);
+                $stmt->bindParam(':whatsapp', $whatsapp);
+                $stmt->bindParam(':email', $email);
             }
             
             // EXECUTA O INSERT OU UPDATE ACIMA

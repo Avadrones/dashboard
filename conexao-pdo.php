@@ -11,6 +11,10 @@ password
 
 );
 }catch(PDOException $e) {
-    echo "ERROR: " .$e->getMessage();
+    $_SESSION["tipo"] = 'error';
+    $_SESSION["title"] = 'ops';
+    $_SESSION["title"] = $e->getMessage();
+
+    header("Location: ./");
     exit;
 }
