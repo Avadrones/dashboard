@@ -32,7 +32,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="./ordens-servico" class="nav-link">
+            <a href="<?php echo caminhoURL;?>ordens-servico" class="nav-link">
               <i class="bi bi-cash-coin"></i>
               <p>
                 Ordens de Serviço
