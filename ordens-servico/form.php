@@ -58,7 +58,7 @@ if (empty($_GET["ref"])) {
     <!-- Tempusdominus Bootstrap 4 -->
     <link rel="stylesheet" href="../dist/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
     <!-- iCheck -->
-    <link rel="stylesheet" href="dist/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="../dist/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
     <!-- overlayScrollbars -->
@@ -94,36 +94,30 @@ if (empty($_GET["ref"])) {
                                         <div class="row">
                                             <div class="col-2">
                                                 <label for="pk_ordem_servico" class="form-label">Cód</label>
-                                                <input readonly type="text" class="form-control" id="pk_ordem_servico" name="pk_ordem_servico" value="<?php echo
-                                                                                                                                                        $pk_ordem_servico; ?>">
+                                                <input readonly type="text" class="form-control" id="pk_ordem_servico" name="pk_ordem_servico" value="<?php echo $pk_ordem_servico; ?>">
                                             </div>
                                             <div class="col-4">
                                                 <label for="nome" class="form-label">CPF</label>
-                                                <input required type="text" class="form-control" id="nome" name="nome" value="<?php echo
-                                                                                                                                $nome; ?>">
+                                                <input required type="text" class="form-control" id="CPF" name="CPF" value="<?php echo $CPF; ?>" data-mask="000.000.000-00">
                                             </div>
                                             <div class="col-6">
                                                 <label for="nome" class="form-label">NOME</label>
-                                                <input required type="text" class="form-control" id="CPF" name="CPF" value="<?php echo
-                                                                                                                            $CPF; ?>">
+                                                <input required type="text" class="form-control" id="nome" name="nome" value="<?php echo $nome; ?>">
                                             </div>
 
                                         </div>
                                         <div class="row">
                                             <div class="col-4">
                                                 <label for="nome" class="form-label">Data O.S.</label>
-                                                <input required type="date" class="form-control" id="data_ordem_servico" name="data_ordem_servico" value="<?php echo
-                                                                                                                                                            $data_ordem_servico; ?>">
+                                                <input required type="date" class="form-control" id="data_ordem_servico" name="data_ordem_servico" value="<?php echo $data_ordem_servico; ?>">
                                             </div>
                                             <div class="col-4">
                                                 <label for="nome" class="form-label">Data Inicial</label>
-                                                <input required type="date" class="form-control" id="data_inicial" name="data_inicial" value="<?php echo
-                                                                                                                                                $data_inicial; ?>">
+                                                <input required type="date" class="form-control" id="data_inicial" name="data_inicial" value="<?php echo $data_inicial; ?>">
                                             </div>
                                             <div class="col-4">
                                                 <label for="nome" class="form-label">Data Final</label>
-                                                <input required type="date" class="form-control" id="data_final" name="data_final" value="<?php echo
-                                                                                                                                            $data_final; ?>">
+                                                <input required type="date" class="form-control" id="data_final" name="data_final" value="<?php echo $data_final; ?>">
                                             </div>
                                         </div>
                                         <div class=" mt-5 card card-warning card-outline">
@@ -146,11 +140,37 @@ if (empty($_GET["ref"])) {
                                                         <tr>
                                                             <td>
                                                                 <select class="form-control" id="">
-                                                                    <option value=""> Selecione </option>
+                                                                    <option value="">--Selecione--</option>
+
+                                                                    <?php
+                                                                    $sql = "
+                                                                    SELECT pk_servico, servico
+                                                                    FROM servicos
+                                                                    ORDER BY servico
+                                                                    ";
+
+                                                                    try {
+                                                                        $stmt = $conn->prepare($sql);
+                                                                        $stmt->execute();
+
+                                                                        $dados = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+                                                                        foreach ($dados as $key => $row) {
+                                                                            echo '<option value="' . $row->pk_servico . '">' . $row->servico . '</option>';
+                                                                        }
+                                                                    } catch (Exception $ex) {
+                                                                        $_SESSION["tipo"] = "error";
+                                                                        $_SESSION["title"] = "ops!";
+                                                                        $_SESSION["msg"] = $ex->getMessage();
+
+                                                                        header("Location: ./");
+                                                                        exit;
+                                                                    }
+                                                                    ?>
                                                                 </select>
                                                             </td>
                                                             <td class="">
-                                                                <input class="form-control" type="text">
+                                                                <input class="form-control" type="number">
                                                             </td>
                                                             <td class="">
                                                                 <a href="" class="btn btn-danger">
@@ -216,8 +236,25 @@ if (empty($_GET["ref"])) {
     <!-- overlayScrollbars -->
     <script src="../dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script> <!-- AdminLTE App -->
     <script src="../dist/js/adminlte.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
         $(function() {
+
+            $("#cpf").blur(function(){
+                // LIMPAR INPUT DE NOME
+                alert('#nome').val("");
+                // FAZ A REQUISIÇÂO PARA O ARQUIVO CONSULTAR_CPF.PHP
+                $.getJSON(
+                    'consultar_cpf.php',
+                    function(result) {
+                        console.log(result)
+                    }
+                )
+            });
 
             $("#theme-mode").click(function() {
                 var classMode = $("#theme-mode").attr("class")

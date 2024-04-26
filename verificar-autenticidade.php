@@ -10,11 +10,11 @@ if ($_SESSION["autenticado"] != true) {
     // DESTRUIR QUALQUER SESSÃO EXISTENTE
     session_destroy();
 
-    header("Location: ./login.php");
+    header("Location: ".caminhoURL."/login.php");
     exit;
 } else {
 
-    $tempo_limite = 300; // SEGUNDOS
+    $tempo_limite = 3000; // SEGUNDOS
     $tempo_atual = time();
 
     // VERIFICAR TEMPO INATIVO DO USUÁRIO
@@ -26,7 +26,7 @@ if ($_SESSION["autenticado"] != true) {
         $_SESSION["tipo"] = "warning"; 
         $_SESSION["msg"] = "Tempo de sessão esgotado!";
 
-      header("Location: ./login.php");
+      header("Location: ".caminhoURL."/login.php");
         exit;
     } else {
         $_SESSION["tempo_login"] = time();

@@ -100,12 +100,12 @@ if (empty($_GET["ref"])) {
                                             <div class="col-2">
                                                 <label for="nome" class="form-label">CPF</label>
                                                 <input required type="text" class="form-control" id="CPF" name="CPF" value="<?php echo
-                                                                                                                            $CPF; ?>">
+                                                                                                                            $CPF; ?>"dat-mask="000.000.000-00">
                                             </div>
                                             <div class="col-2">
                                                 <label for="nome" class="form-label">WHATSAPP</label>
                                                 <input required type="text" class="form-control" id="whatsapp" name="whatsapp" value="<?php echo
-                                                                                                                                        $whatsapp; ?>">
+                                                                                                                                        $whatsapp; ?>"dat-mask="(00)00000-0000">
                                             </div>
                                             <div class="col-3">
                                                 <label for="nome" class="form-label">EMAIL</label>
@@ -164,6 +164,10 @@ if (empty($_GET["ref"])) {
     <!-- overlayScrollbars -->
     <script src="../dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script> <!-- AdminLTE App -->
     <script src="../dist/js/adminlte.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
         $(function() {
 
