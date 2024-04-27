@@ -1,6 +1,33 @@
 <?php
 include('../verificar-autenticidade.php');
 include('../conexao-pdo.php');
+$pagina_ativa = "ordens_servico";
+
+$sql = "
+SELECT pk_servico, servico
+FROM servicos
+ORDER BY servico
+";
+
+try {
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+
+    $dados = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    $options = '<option value=""> -- Selecione -- </option>;'; 
+
+    foreach ($dados as $key => $row) {
+        $options .= '<option value="' . $row->pk_servico . '">' . $row->servico . '</option>';
+    }
+} catch (Exception $ex) {
+    $_SESSION["tipo"] = "error";
+    $_SESSION["title"] = "ops!";
+    $_SESSION["msg"] = $ex->getMessage();
+
+    header("Location: ./");
+    exit;
+}
 
 if (empty($_GET["ref"])) {
     $pk_ordem_servico = "";
@@ -122,13 +149,13 @@ if (empty($_GET["ref"])) {
                                         </div>
                                         <div class=" mt-5 card card-warning card-outline">
                                             <div class="card-header">
-                                                <h3 class="card-title">Lista de O.S.</h3>
-                                                <a href="./form.php" class="btn btn-sm btn-primary float-right rounded-circle">
+                                                <h3 class="card-title">Lista de serviços</h3>
+                                                <button type="button" class="btn btn-sm btn-primary float-right rounded-circle" id="btn-add">
                                                     <i class="bi bi-plus"></i>
-                                                </a>
+                                                </button>
                                             </div>
                                             <div class="card-body">
-                                                <table class="table">
+                                                <table class="table" id="table_servico">
                                                     <thead>
                                                         <tr>
                                                             <th>SERVIÇO</th>
@@ -140,42 +167,14 @@ if (empty($_GET["ref"])) {
                                                         <tr>
                                                             <td>
                                                                 <select class="form-control" id="">
-                                                                    <option value="">--Selecione--</option>
-
-                                                                    <?php
-                                                                    $sql = "
-                                                                    SELECT pk_servico, servico
-                                                                    FROM servicos
-                                                                    ORDER BY servico
-                                                                    ";
-
-                                                                    try {
-                                                                        $stmt = $conn->prepare($sql);
-                                                                        $stmt->execute();
-
-                                                                        $dados = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-                                                                        foreach ($dados as $key => $row) {
-                                                                            echo '<option value="' . $row->pk_servico . '">' . $row->servico . '</option>';
-                                                                        }
-                                                                    } catch (Exception $ex) {
-                                                                        $_SESSION["tipo"] = "error";
-                                                                        $_SESSION["title"] = "ops!";
-                                                                        $_SESSION["msg"] = $ex->getMessage();
-
-                                                                        header("Location: ./");
-                                                                        exit;
-                                                                    }
-                                                                    ?>
+                                                                    <?php echo $options; ?>
                                                                 </select>
                                                             </td>
                                                             <td class="">
                                                                 <input class="form-control" type="number">
                                                             </td>
                                                             <td class="">
-                                                                <a href="" class="btn btn-danger">
-                                                                    <i class="bi bi-trash"></i>
-                                                                </a>
+                                                                
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -244,14 +243,22 @@ if (empty($_GET["ref"])) {
     <script>
         $(function() {
 
-            $("#cpf").blur(function(){
+            $("#CPF").change(function() {
                 // LIMPAR INPUT DE NOME
-                alert('#nome').val("");
+                $('#nome').val("");
                 // FAZ A REQUISIÇÂO PARA O ARQUIVO CONSULTAR_CPF.PHP
                 $.getJSON(
-                    'consultar_cpf.php',
-                    function(result) {
-                        console.log(result)
+                    'consultar_cpf.php', {
+                     cpf: $("#CPF").val()
+                    },
+                    function(data) {
+                        if (data['success'] == true) {
+                            $("#nome").val(data['dado']['nome']);
+                        } else {
+                            alert(data['dado']);
+                            $("#CPF").val("")
+                        }
+                        console.log(data)
                     }
                 )
             });
@@ -270,6 +277,32 @@ if (empty($_GET["ref"])) {
                     $("#asideMenu").attr("Class", "main-sidebar sidebar-dark-primary elevation-4");
                 }
             });
+
+            $("#btn-add").click(function() {
+            var newRow = $("<tr>");
+            var cols = "";
+            cols += '<td>';
+            cols += '<select class="form-control" name="">';
+            cols += ' <?php echo $options; ?>';
+            cols += '</select>';
+            cols += '</td>';
+            cols += '<td><input type="number" class="form-control" name=""></td>';
+            cols += '<td>';
+            cols += '<button class="btn btn-danger btn-sm" onclick="RemoveRow(this)" type="button"><i class="fas fa-trash"></button>';
+            cols += '</td>';
+            newRow.append(cols);
+            $("#table_servico").append(newRow);
+            });
+            
+            
+            RemoveRow= function (item) {
+             var tr = $(item).closest('tr');
+             tr.fadeOut(400, function() {
+                tr.remove();
+             });
+             return false;
+
+            }
 
         })
     </script>

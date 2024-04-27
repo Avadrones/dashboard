@@ -1,7 +1,7 @@
 <?php
 include('../verificar-autenticidade.php');
 include('../conexao-pdo.php');
-
+$pagina_ativa = "servicos";
     if(empty($_GET["ref"])) {
         $pk_servico = "";
         $servico = "";

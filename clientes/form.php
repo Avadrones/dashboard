@@ -1,6 +1,7 @@
 <?php
 include('../verificar-autenticidade.php');
 include('../conexao-pdo.php');
+$pagina_ativa = "clientes";
 
 if (empty($_GET["ref"])) {
     $pk_cliente = "";
