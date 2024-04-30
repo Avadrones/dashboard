@@ -123,9 +123,16 @@ if (empty($_GET["ref"])) {
                                                 <label for="pk_ordem_servico" class="form-label">Cód</label>
                                                 <input readonly type="text" class="form-control" id="pk_ordem_servico" name="pk_ordem_servico" value="<?php echo $pk_ordem_servico; ?>">
                                             </div>
-                                            <div class="col-4">
+                                            <div class="col-md-4">
                                                 <label for="nome" class="form-label">CPF</label>
+                                                <div class="input-group">
                                                 <input required type="text" class="form-control" id="CPF" name="CPF" value="<?php echo $CPF; ?>" data-mask="000.000.000-00">
+                                                <span class="input-group-append">
+                                                    <button id="btn-search" type="button" class="btn btn-default btn-flat">
+                                                        <i class="bi bi-search"></i>
+                                                    </button>
+                                                </span>
+                                                </div>
                                             </div>
                                             <div class="col-6">
                                                 <label for="nome" class="form-label">NOME</label>
@@ -166,12 +173,12 @@ if (empty($_GET["ref"])) {
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                <select class="form-control" id="">
+                                                                <select required class="form-control" name="fk_servico[]">
                                                                     <?php echo $options; ?>
                                                                 </select>
                                                             </td>
                                                             <td class="">
-                                                                <input class="form-control" type="number">
+                                                                <input class="form-control" type="number" name="valoe[]">
                                                             </td>
                                                             <td class="">
                                                                 
@@ -243,7 +250,12 @@ if (empty($_GET["ref"])) {
     <script>
         $(function() {
 
-            $("#CPF").change(function() {
+            $("#btn-search").keyup(function() {
+             // // LIMPAR INPUT DE NOME
+             $('#nome').val("");
+            })
+
+            $("#btn-search").click(function() {
                 // LIMPAR INPUT DE NOME
                 $('#nome').val("");
                 // FAZ A REQUISIÇÂO PARA O ARQUIVO CONSULTAR_CPF.PHP
@@ -256,7 +268,7 @@ if (empty($_GET["ref"])) {
                             $("#nome").val(data['dado']['nome']);
                         } else {
                             alert(data['dado']);
-                            $("#CPF").val("")
+                            $("#CPF").focus("")
                         }
                         console.log(data)
                     }
@@ -282,7 +294,7 @@ if (empty($_GET["ref"])) {
             var newRow = $("<tr>");
             var cols = "";
             cols += '<td>';
-            cols += '<select class="form-control" name="">';
+            cols += '<select class="form-control" name="fk_servico">';
             cols += ' <?php echo $options; ?>';
             cols += '</select>';
             cols += '</td>';
