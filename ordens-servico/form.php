@@ -136,22 +136,22 @@ if (empty($_GET["ref"])) {
                                             </div>
                                             <div class="col-6">
                                                 <label for="nome" class="form-label">NOME</label>
-                                                <input required type="text" class="form-control" id="nome" name="nome" value="<?php echo $nome; ?>">
+                                                <input required readonly type="text" class="form-control" id="nome" name="nome" value="<?php echo $nome; ?>">
                                             </div>
 
                                         </div>
                                         <div class="row">
                                             <div class="col-4">
                                                 <label for="nome" class="form-label">Data O.S.</label>
-                                                <input required type="date" class="form-control" id="data_ordem_servico" name="data_ordem_servico" value="<?php echo $data_ordem_servico; ?>">
+                                                <input required readonly type="date" class="form-control" id="data_ordem_servico" name="data_ordem_servico" value="<?php echo $data_ordem_servico; ?>">
                                             </div>
                                             <div class="col-4">
                                                 <label for="nome" class="form-label">Data Inicial</label>
-                                                <input required type="date" class="form-control" id="data_inicial" name="data_inicial" value="<?php echo $data_inicial; ?>">
+                                                <input type="date" class="form-control" id="data_inicial" name="data_inicial" value="<?php echo $data_inicial; ?>">
                                             </div>
                                             <div class="col-4">
                                                 <label for="nome" class="form-label">Data Final</label>
-                                                <input required type="date" class="form-control" id="data_final" name="data_final" value="<?php echo $data_final; ?>">
+                                                <input  type="date" class="form-control" id="data_final" name="data_final" value="<?php echo $data_final; ?>">
                                             </div>
                                         </div>
                                         <div class=" mt-5 card card-warning card-outline">
@@ -171,19 +171,61 @@ if (empty($_GET["ref"])) {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
+                                                        <?php
+                                                        if (empty($pk_ordem_servico)) {
+                                                            echo'
+                                                            <tr>
                                                             <td>
                                                                 <select required class="form-control" name="fk_servico[]">
-                                                                    <?php echo $options; ?>
+                                                                    '. $options .'
                                                                 </select>
                                                             </td>
-                                                            <td class="">
-                                                                <input class="form-control" type="number" name="valoe[]">
+                                                            <td >
+                                                                <input class="form-control" type="number" name="valor[]">
                                                             </td>
-                                                            <td class="">
+                                                            <td> </td>
                                                                 
-                                                            </td>
+                                                            
                                                         </tr>
+                                                        ';
+                                                        } else {
+                                                            $sql ="
+                                                            SELECT
+                                                            FROM servicos
+                                                            JOIN rl_servicos_os rl.fk_servico = s.pk_servico
+                                                            WHERE rl.fk_ordem_servico = $pk_ordem_servico
+                                                            ";
+
+                                                            try {
+                                                                $stmt = $conn->prepare($sql);
+                                                                $stmt->bindParam(':pk_servico', $pk_ordem_servico);
+                                                                $stmt->execute();
+
+                                                                $dados = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+                                                                foreach ($dados as $key => $row) {
+                                                                    echo'
+                                                                    <tr>
+                                                                    <td>
+                                                                        <select required class="form-control" name="fk_servico[]">
+                                                                        <option selected value="'.$row->pk_servico.'">'.$$row_servico.'</option>
+                                                                            '. $options .'
+                                                                            </select>
+                                                                            </td>
+                                                                            <td >
+                                                                                <input value="'.$row->valor.'" required class="form-control" type="number" name="valor[]">
+                                                                            </td>
+                                                                            <td> </td>
+                                                                            </tr>
+                                                                            ';                                                                                
+                                                                }
+                                                            }  catch (Exception $ex) {
+                                                                $_SESSION["tipo"] = "error";
+                                                                $_SESSION["title"] = "ops!";
+                                                                $_SESSION["msg"] = $ex->getMessage();                                                            
+                                                        } 
+                                                    }
+                                                    ?>                                                    
                                                     </tbody>
                                                 </table>
 

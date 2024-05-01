@@ -100,13 +100,11 @@ if (empty($_GET["ref"])) {
                                             </div>
                                             <div class="col-2">
                                                 <label for="nome" class="form-label">CPF</label>
-                                                <input required type="text" class="form-control" id="CPF" name="CPF" value="<?php echo
-                                                                                                                            $CPF; ?>"dat-mask="000.000.000-00">
+                                                <input required type="text" class="form-control" id="CPF" name="CPF" value="<?php echo $CPF; ?>" data-mask="000.000.000-00">
                                             </div>
                                             <div class="col-2">
                                                 <label for="nome" class="form-label">WHATSAPP</label>
-                                                <input required type="text" class="form-control" id="whatsapp" name="whatsapp" value="<?php echo
-                                                                                                                                        $whatsapp; ?>"dat-mask="(00)00000-0000">
+                                                <input required type="text" class="form-control" id="whatsapp" name="whatsapp" value="<?php echo $whatsapp; ?>" data-mask="(00)00000-0000">
                                             </div>
                                             <div class="col-3">
                                                 <label for="nome" class="form-label">EMAIL</label>

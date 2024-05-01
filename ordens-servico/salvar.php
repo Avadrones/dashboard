@@ -15,7 +15,7 @@ if ($_POST) {
     } else {
         // RECUPERA INFORMAÇÕES PREENCHIDAS PELO USUARÍO
         $pk_servico = trim($_POST["pk_ordem_servico"]);
-        $CPF = trim($_POST["CPF"]);
+        $cpf = trim($_POST["CPF"]);
         $whatsapp = trim($_POST["data_inicio"]);
         $email = trim($_POST["data_fim"]);
 
@@ -31,26 +31,27 @@ if ($_POST) {
                 )
                 ";
                 $stmt = $conn->prepare($sql);
-                $stmt->bindParam(': data_inicio', $data_inicio);
+                $stmt->bindParam(':data_inicio', $data_inicio);
                 $stmt->bindParam(':data_fim', $data_fim);
                 $stmt->bindParam(':cpf', $cpf);
                
             } else {
                 $sql = "
                 UPDATE ordem_servico SET
-                nome = :data_inicio,
-                CPF = :data_fim,
-                SELECT pk_cliente
-                FROM clientes
-                WHERE cpf LIKE :cpf
-                )
+                fk_cliente = (
+                    SELECT pk_cliente
+                    FROM clientes
+                    WHERE cpf LIKE :cpf
+                ),
+                data_inicio = :data_inicio,
+                data_fim = :data_fim
                 WHERE pk_ordem_servico = :pk_ordem_servico
                 ";
                 $stmt = $conn->prepare($sql);
                 $stmt->bindParam(':pk_ordem_servico', $pk_ordem_servico);
                 $stmt->bindParam(':data_inicio', $data_inicio);
                 $stmt->bindParam(':data_fim', $data_fim);
-                $stmt->bindParam(':CPF', $CPF);
+                $stmt->bindParam(':cpf', $cpf);
             }
             
             // EXECUTA O INSERT OU UPDATE ACIMA
@@ -87,7 +88,7 @@ if ($_POST) {
             foreach ($servicos as $key => $servico) {
                 $stmt = $conn->prepare($sql);
                 $stmt->bindParam(":fk_servico_$key", $servico[$key]);
-                $stmt->bindParam("fk_ordem_servico", $fk_ordem_servico);
+                $stmt->bindParam(":fk_ordem_servico", $fk_ordem_servico);
                 $stmt->bindParam(":valor_$key", $valores[$key]);
             }
 
