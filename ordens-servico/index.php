@@ -25,8 +25,8 @@ $pagina_ativa = "ordens_servico";
   <link rel="stylesheet" href="../dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="../dist/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-   <!-- SweetAlert2 -->
-   <link rel="stylesheet" href="../dist/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="../dist/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -71,8 +71,8 @@ $pagina_ativa = "ordens_servico";
                     <tbody>
                       <?php
                       $sql = "
-                      SELECT pk_ordem_servico, DATE_FORMAT(Data_Inicio, '%d/%m/%y') Data_Inicio,
-                       DATE_FORMAT(Data_fim, '%d/%m/%y') Data_fim,
+                      SELECT pk_ordem_servico, DATE_FORMAT(Data_Inicio, '%d/%m/%Y') Data_Inicio,
+                       DATE_FORMAT(Data_fim, '%d/%m/%Y') Data_fim,
                        FORMAT(valor_total,2,'de_DE') valor_total, 
                       nome
                       FROM ordens_servicos
@@ -80,47 +80,47 @@ $pagina_ativa = "ordens_servico";
                       ORDER BY data_inicio DESC
                       ";
                       try {
-  // PREPARA A SINTAXE NA CONEXÃO
-  $stmt = $conn->prepare($sql);
-  // EXECUTA O COMANDO NO MYSQL
-  $stmt ->execute();
-  // RECEBE AS INFORMAÇÕES VINDAS NO MYSQL
-  $dados = $stmt->fetchAll(PDO::FETCH_OBJ);
-   // LAÇO DE REPETIÇÃO PARA PRINTAR INFORMAÇÕES
-   foreach ($dados as $row) {
-   echo '
-   <tr>
-    <td>'.$row->pk_ordem_servico.'</td>
-    <td>'.$row->nome.'</td>
-    <td>'.$row->Data_Inicio.'</td>
-    <td>'.$row->Data_fim.'</td>
-    <td>'.$row->valor_total.'</td>
-    <td>
-      <div class="btn-group">
-        <button type="button" class="btn btn-default dropown-toggle
-         dropdown-icon" data-toggle="dropdown">
-          <i class="bi bi-tools"></i>
-        </button>
-        <div class="dropdown-menu" role="menu">
-          <a class="dropdown-item" href="form.php?ref='.base64_encode($row->pk_ordem_servico).'">
-            <i class="bi bi-pencil"></i>Editar
-          </a>
-          <a class="dropdown-item" href="remover.php?ref='.base64_encode($row->pk_ordem_servico).'">
-            <i class="bi bi-trash" href="#"></i>Remover
-          </a>
-        </div>
-      </div>
-    </td>
-  </tr>
-  ';
-                  }
+                        // PREPARA A SINTAXE NA CONEXÃO
+                        $stmt = $conn->prepare($sql);
+                        // EXECUTA O COMANDO NO MYSQL
+                        $stmt->execute();
+                        // RECEBE AS INFORMAÇÕES VINDAS NO MYSQL
+                        $dados = $stmt->fetchAll(PDO::FETCH_OBJ);
+                        // LAÇO DE REPETIÇÃO PARA PRINTAR INFORMAÇÕES
+                        foreach ($dados as $row) {
+                          echo '
+                          <tr>
+                            <td>' . $row->pk_ordem_servico . '</td>
+                            <td>' . $row->nome . '</td>
+                            <td>' . $row->Data_Inicio . '</td>
+                            <td>' . $row->Data_fim . '</td>
+                            <td>' . $row->valor_total . '</td>
+                            <td>
+                              <div class="btn-group">
+                                <button type="button" class="btn btn-default dropown-toggle
+                                dropdown-icon" data-toggle="dropdown">
+                                  <i class="bi bi-tools"></i>
+                                </button>
+                                <div class="dropdown-menu" role="menu">
+                                  <a class="dropdown-item" href="form.php?ref=' . base64_encode($row->pk_ordem_servico) . '">
+                                    <i class="bi bi-pencil"></i>Editar
+                                  </a>
+                                  <a class="dropdown-item" href="remover.php?ref=' . base64_encode($row->pk_ordem_servico) . '">
+                                    <i class="bi bi-trash" href="#"></i>Remover
+                                  </a>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          ';
+                        }
                       } catch (Exception $ex) {
-                        $_SESSION["tipo"] = "error"; 
+                        $_SESSION["tipo"] = "error";
                         $_SESSION["title"] = "ops!";
                         $_SESSION["msg"] = $ex->getMessage();
                       }
                       ?>
-                    
+
                     </tbody>
                   </table>
                 </div>
@@ -165,8 +165,8 @@ $pagina_ativa = "ordens_servico";
   <script src="../dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script> <!-- AdminLTE App -->
   <script src="../dist/js/adminlte.js"></script>
   <!-- SweetAlert2 -->
-<script src="../dist/plugins/SweetAlert2/SweetAlert2.min.js"></script>
-<?php include ("../sweet-alert-2.php"); ?>
+  <script src="../dist/plugins/SweetAlert2/SweetAlert2.min.js"></script>
+  <?php include("../sweet-alert-2.php"); ?>
   <script>
     $(function() {
 

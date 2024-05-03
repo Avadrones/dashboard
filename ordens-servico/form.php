@@ -31,7 +31,7 @@ try {
 
 if (empty($_GET["ref"])) {
     $pk_ordem_servico = "";
-    $CPF = "";
+    $cpf = "";
     $nome = "";
     $data_ordem_servico = "";
     $data_inicio = "";
@@ -40,7 +40,7 @@ if (empty($_GET["ref"])) {
     $pk_ordem_servico = base64_decode(trim($_GET["ref"]));
     $sql = "
         SELECT  pk_ordem_servico, data_ordem_servico, data_inicio, data_fim,
-        CPF, nome
+        cpf, nome
         FROM ordens_servicos
         JOIN clientes ON pk_cliente = fk_cliente
         WHERE pk_ordem_servico = :pk_ordem_servico
@@ -55,9 +55,9 @@ if (empty($_GET["ref"])) {
     if ($stmt->rowCount() > 0) {
         $dado = $stmt->fetch(PDO::FETCH_OBJ);
         $data_ordem_servico = $dado->data_ordem_servico;
-        $data_inicioF = $dado->data_inicio;
+        $data_inicio = $dado->data_inicio;
         $data_fim = $dado->data_fim;
-        $CPF = $dado->CPF;
+        $cpf = $dado->cpf;
         $nome = $dado->nome;
     } else {
         $_SESSION["tipo"] = 'error';
@@ -126,7 +126,7 @@ if (empty($_GET["ref"])) {
                                             <div class="col-md-4">
                                                 <label for="nome" class="form-label">CPF</label>
                                                 <div class="input-group">
-                                                <input required type="text" class="form-control" id="CPF" name="CPF" value="<?php echo $CPF; ?>" data-mask="000.000.000-00">
+                                                <input required type="text" class="form-control" id="cpf" name="cpf" value="<?php echo $cpf; ?>" data-mask="000.000.000-00">
                                                 <span class="input-group-append">
                                                     <button id="btn-search" type="button" class="btn btn-default btn-flat">
                                                         <i class="bi bi-search"></i>
@@ -147,11 +147,11 @@ if (empty($_GET["ref"])) {
                                             </div>
                                             <div class="col-4">
                                                 <label for="nome" class="form-label">Data Inicial</label>
-                                                <input type="date" class="form-control" id="data_inicial" name="data_inicial" value="<?php echo $data_inicial; ?>">
+                                                <input type="date" class="form-control" id="data_inicio" name="data_inicio" value="<?php echo $data_inicio; ?>">
                                             </div>
                                             <div class="col-4">
                                                 <label for="nome" class="form-label">Data Final</label>
-                                                <input  type="date" class="form-control" id="data_final" name="data_final" value="<?php echo $data_final; ?>">
+                                                <input  type="date" class="form-control" id="data_fim" name="data_fim" value="<?php echo $data_fim; ?>">
                                             </div>
                                         </div>
                                         <div class=" mt-5 card card-warning card-outline">
@@ -190,15 +190,15 @@ if (empty($_GET["ref"])) {
                                                         ';
                                                         } else {
                                                             $sql ="
-                                                            SELECT
-                                                            FROM servicos
-                                                            JOIN rl_servicos_os rl.fk_servico = s.pk_servico
-                                                            WHERE rl.fk_ordem_servico = $pk_ordem_servico
+                                                            SELECT s.pk_servico, s.servico, rl.valor
+                                                            FROM servicos AS s
+                                                            JOIN rl_servicos_os AS rl ON rl.fk_servico = s.pk_servico
+                                                            WHERE rl.fk_ordem_servico = :pk_ordem_servico
                                                             ";
 
                                                             try {
                                                                 $stmt = $conn->prepare($sql);
-                                                                $stmt->bindParam(':pk_servico', $pk_ordem_servico);
+                                                                $stmt->bindParam(':pk_ordem_servico', $pk_ordem_servico);
                                                                 $stmt->execute();
 
                                                                 $dados = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -208,7 +208,7 @@ if (empty($_GET["ref"])) {
                                                                     <tr>
                                                                     <td>
                                                                         <select required class="form-control" name="fk_servico[]">
-                                                                        <option selected value="'.$row->pk_servico.'">'.$$row_servico.'</option>
+                                                                        <option selected value="'.$row->pk_servico.'">'.$row->servico.'</option>
                                                                             '. $options .'
                                                                             </select>
                                                                             </td>
@@ -292,7 +292,7 @@ if (empty($_GET["ref"])) {
     <script>
         $(function() {
 
-            $("#btn-search").keyup(function() {
+            $("#cpf").keyup(function() {
              // // LIMPAR INPUT DE NOME
              $('#nome').val("");
             })
@@ -303,16 +303,15 @@ if (empty($_GET["ref"])) {
                 // FAZ A REQUISIÇÂO PARA O ARQUIVO CONSULTAR_CPF.PHP
                 $.getJSON(
                     'consultar_cpf.php', {
-                     cpf: $("#CPF").val()
+                     cpf: $("#cpf").val()
                     },
                     function(data) {
                         if (data['success'] == true) {
                             $("#nome").val(data['dado']['nome']);
                         } else {
                             alert(data['dado']);
-                            $("#CPF").focus("")
+                            $("#cpf").focus("")
                         }
-                        console.log(data)
                     }
                 )
             });
@@ -336,11 +335,11 @@ if (empty($_GET["ref"])) {
             var newRow = $("<tr>");
             var cols = "";
             cols += '<td>';
-            cols += '<select class="form-control" name="fk_servico">';
+            cols += '<select class="form-control" name="fk_servico[]">';
             cols += ' <?php echo $options; ?>';
             cols += '</select>';
             cols += '</td>';
-            cols += '<td><input type="number" class="form-control" name=""></td>';
+            cols += '<td><input type="number" class="form-control" name="valor[]"></td>';
             cols += '<td>';
             cols += '<button class="btn btn-danger btn-sm" onclick="RemoveRow(this)" type="button"><i class="fas fa-trash"></button>';
             cols += '</td>';

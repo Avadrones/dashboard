@@ -14,21 +14,20 @@ if ($_POST) {
         exit;
     } else {
         // RECUPERA INFORMAÇÕES PREENCHIDAS PELO USUARÍO
-        $pk_servico = trim($_POST["pk_ordem_servico"]);
-        $cpf = trim($_POST["CPF"]);
-        $whatsapp = trim($_POST["data_inicio"]);
-        $email = trim($_POST["data_fim"]);
+        $pk_ordem_servico = trim($_POST["pk_ordem_servico"]);
+        $cpf = trim($_POST["cpf"]);
+        $data_inicio = trim($_POST["data_inicio"]);
+        $data_fim = trim($_POST["data_fim"]);
 
         try {
-            if (empty($pk_cliente)) {
+            if (empty($pk_ordem_servico)) {
                 $sql = "
-                INSERT INTO ordem_servico (data_ordem_servico, data_inicio,
-                 data_fim, fk_cliente ) VALUES
+                INSERT INTO ordens_servicos (data_ordem_servico, data_inicio, data_fim, fk_cliente ) VALUES
                 (CURDATE(), :data_inicio, :data_fim, (
                     SELECT pk_cliente
                     FROM clientes
                     WHERE cpf LIKE :cpf
-                )
+                ))
                 ";
                 $stmt = $conn->prepare($sql);
                 $stmt->bindParam(':data_inicio', $data_inicio);
@@ -37,7 +36,7 @@ if ($_POST) {
                
             } else {
                 $sql = "
-                UPDATE ordem_servico SET
+                UPDATE ordens_servicos SET
                 fk_cliente = (
                     SELECT pk_cliente
                     FROM clientes
@@ -54,6 +53,7 @@ if ($_POST) {
                 $stmt->bindParam(':cpf', $cpf);
             }
             
+            
             // EXECUTA O INSERT OU UPDATE ACIMA
             $stmt->execute();
 
@@ -68,8 +68,8 @@ if ($_POST) {
             WHERE fk_ordem_servico = :fk_ordem_servico
             ";
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':fk_ordem_servico', $fk_ordem_servico);
-            $stmt->bindParam(':data_inicio', $data_inicio);
+            $stmt->bindParam(':fk_ordem_servico', $pk_ordem_servico);
+            
             $stmt->execute();
 
             $sql = "
@@ -79,21 +79,35 @@ if ($_POST) {
             $servicos = $_POST["fk_servico"];
             $valores = $_POST["valor"];
 
+
             foreach ($servicos as $key => $servico) {
-                $sql = "(:fk_servico_$key, :fk_ordem_servico, :valor_$key),";
+                $sql .= "(:fk_servico_$key, :fk_ordem_servico, :valor_$key),";
             }
             $sql = substr($sql, 0, -1);
             $stmt = $conn->prepare($sql);
 
             foreach ($servicos as $key => $servico) {
-                $stmt = $conn->prepare($sql);
-                $stmt->bindParam(":fk_servico_$key", $servico[$key]);
-                $stmt->bindParam(":fk_ordem_servico", $fk_ordem_servico);
+                $stmt->bindParam(":fk_servico_$key", $servicos[$key]);
+                $stmt->bindParam(":fk_ordem_servico", $pk_ordem_servico);
                 $stmt->bindParam(":valor_$key", $valores[$key]);
             }
 
             $stmt->execute();
 
+            $sql = "
+            UPDATE ordens_servicos SET
+            valor_total = (
+                SELECT SUM(valor)
+                FROM rl_servicos_os
+                WHERE fk_ordem_servico = pk_ordem_servico
+                )
+                WHERE pk_ordem_servico = :pk_ordem_servico
+            ";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':pk_ordem_servico', $pk_ordem_servico);
+            $stmt->execute();
+        
             $_SESSION["tipo"] = 'success';
             $_SESSION["title"] = 'Oba!';
             $_SESSION["msg"] = 'Registro salvo com sucesso!';

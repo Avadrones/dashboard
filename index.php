@@ -2,6 +2,34 @@
 include('verificar-autenticidade.php');
 include('conexao-pdo.php');
 $pagina_ativa = "home";
+
+$sql = "
+SELECT COUNT(pk_ordem_servico) total_os,
+(
+FROM ordens_servicos
+) total_clientes,
+(
+  SELECT COUNT(pk_servico)
+  FROM servicos
+) total_servicos,
+(
+  SELECT COUNT(pk_servico)
+  FROM ordens_servicos
+  WHERE data_fim <> '0000-00-00'
+) total_os_fechados
+FROM ordens_servicos
+";
+try{
+  $stmt = $conn->prepare($sql);
+  $stmt->execute();
+
+  $dados = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+} catch (PDOException $ex) {
+  $_SESSION["tipo"] = "error";
+  $_SESSION["title"] = "ops";
+  $_SESSION["tipo"] = $ex->getMessage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
