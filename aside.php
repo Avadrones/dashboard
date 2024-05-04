@@ -13,7 +13,7 @@
           <img src="<?php echo caminhoURL;?>/imagens/IMG_20230730_132219_183.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block"><?php echo $_SESSION["nome_usuario"];?></a>
+          <a href="<?php echo caminhoURL;?>/meu-perfil" class="d-block"><?php echo $_SESSION["nome_usuario"];?></a>
         </div>
       </div>
 

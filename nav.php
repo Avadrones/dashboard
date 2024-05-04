@@ -2,27 +2,36 @@
 $sql = "
 SELECT COUNT(pk_ordem_servico) total_os,
 (
-FROM ordens_servicos
+  SELECT COUNT(pk_cliente)
+FROM clientes
 ) total_clientes,
 (
-  SELECT COUNT(pk_cliente)
+  SELECT COUNT(pk_servico)
   FROM servicos
 ) total_servicos,
 (
-  SELECT COUNT(pk_servico)
+  SELECT COUNT(pk_ordem_servico)
   FROM ordens_servicos
   WHERE data_fim <> '0000-00-00'
-) total_os_fechados
+) total_os_fechadas
 FROM ordens_servicos
 ";
+
+
 try{
   $stmt = $conn->prepare($sql);
   $stmt->execute();
 
-  $dados = $stmt->fetchAll(PDO::FETCH_OBJ);
+  $dados = $stmt->fetch(PDO::FETCH_OBJ);
 
-  $total_os_abertas = $dados->total_os - $dados->$total_os_fechadas;
-  $porcentagem_os_concluida = $dados->total_os_fechadas / $dados->total_os * 100;
+  $total_os_abertas = $dados->total_os - $dados->total_os_fechadas;
+  // VERIFICA se HÁ O.S. PARA FAZER A DIVISÃO
+  if($dados->total_os > 0 ) {
+    $porcentagem_os_concluida = $dados->total_os_fechadas / $dados->total_os * 100;
+  } else {
+    $porcentagem_os_concluida = 0;
+  }
+ 
   
 } catch (PDOException $ex) {
   $_SESSION["tipo"] = "error";
