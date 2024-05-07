@@ -15,25 +15,28 @@ if ($_POST) {
       header("Location: login.php");
         exit;
     } else {
-        include('conexao-pdo.php');
-        // RECUPERAR INFORMAÇÕES DO FORMULÁRIO LOGIN
-        $email = trim($_POST["email"]);
-        $senha = trim($_POST["senha"]);
-        $remember = ($_POST["remember"]) ?? "off";
 
+         // RECUPERAR INFORMAÇÕES DO FORMULÁRIO LOGIN
+         $email = trim($_POST["email"]);
+         $senha = trim($_POST["senha"]);
+         $remember = ($_POST["remember"]) ?? "off";
+ 
+        include('./conexao-pdo.php');
 
+        $sql = "
+        SELECT 
+        pk_usuario , nome, foto
+    FROM 
+        usuarios
+    WHERE 
+        email LIKE :email
+        AND senha LIKE :senha
+    ";
+       
 
         // MONTAR SINTAXE SQL PARA CONSULTAR NO BANCO DE DADOS
-        $stmt = $conn->prepare("
-        SELECT 
-            pk_usuario , nome
-        FROM 
-            usuarios
-        WHERE 
-            email LIKE :email
-            AND senha LIKE :senha
-        ");
-
+        $stmt = $conn->prepare("$sql");
+       
         $stmt->bindParam(':email',$email);
         $stmt->bindParam(':senha',$senha);
 
@@ -60,6 +63,9 @@ if ($_POST) {
             // ESTÁ AUTENTICADO CORRETAMENTE
             $_SESSION["autenticado"] = true;
             $_SESSION["pk_usuario"] = $row->pk_usuario;
+            $_SESSION["nome_usuario"] = $row->nome;
+            $_SESSION["foto_usuario"] = $row->foto;
+            $_SESSION["tempo_login"] = time();
 
             // TRANFORMA STRING EM ARRAY, AONDE TIVER ESPAÇO
             $nome_usuario = explode(" ", $row->nome);

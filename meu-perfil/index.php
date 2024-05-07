@@ -86,28 +86,28 @@ if ($stmt->rowCount() > 0) {
                                     <div class="card-body">
                                         <div class="row mb-3">
                                             <div class="col-md-2">
-                                                <img class="img-fluid rounded-circle" src="<?php echo caminhoURL?>/imagens/618.jpeg" width="300" height="300">
+                                                <img class="img-fluid rounded-circle" src="fotos/<?php echo $foto;?>" width="300" height="300">
                                             </div>
                                             <div class="col-md">
                                                 <div class="row mb-3">
                                                     <div class="col">
-                                                        <label for="servico" class="form-label">Nome</label>
+                                                        <label for="nome" class="form-label">Nome</label>
                                                         <input required type="text" class="form-control" id="nome" name="nome" value="<?php echo $nome; ?>">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col">
-                                                        <label for="servico" class="form-label">Email</label>
+                                                        <label for="email" class="form-label">Email</label>
                                                         <input required type="text" class="form-control" id="email" name="email" value="<?php echo $email; ?>">
                                                     </div>
                                                     <div class="col ">
-                                                        <label for="servico" class="form-label">Senha</label>
-                                                        <input required type="text" class="form-control" id="senha" name="senha" value="">
+                                                        <label for="senha" class="form-label">Senha</label>
+                                                        <input type="password" class="form-control" id="senha" name="senha" value="">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col">
-                                                        <label for="servico" class="form-label">Foto</label>
+                                                        <label for="foto" class="form-label">Foto</label>
                                                         <div class="custom-file">
                                                             <input type="file" for="custom-file-input" name="foto" id="foto">
                                                             <label class="custom-file-label" for="foto">Selecionar foto</label>

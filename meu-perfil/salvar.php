@@ -18,14 +18,51 @@ if ($_POST) {
         $nome = trim($_POST["nome"]);
         $email = trim($_POST["email"]);
         $senha = trim($_POST["senha"]);
-        $foto = trim($_POST["foto"]);
+        $foto = $_FILES["foto"];
+
+        // VERIFICA SE EXISTE UMA FOTO A SER SALVA
+        if ($foto["error"] != 4) {
+            $ext_permitidos = array(
+                "bmp",
+                "jpg",
+                "jpeg",
+                "png",
+                "jfif",
+                "tiff"
+            );
+            // $ext_permitidos = ["bmp", "jpg", "jpeg", "png", "jfif", "tiff"];
+            $extensao = pathinfo($foto["name"], PATHINFO_EXTENSION);
+            // VERIFICA SE A EXTENSAO DO ARQUIVO
+            // CONTEM NO ARRAY EXT_PERMITIDOS
+            if(in_array($extensao, $ext_permitidos)) {
+                // GERAR NOME UNICO PARA O ARQUIVO
+                $novo_nome = hash("sha256", uniqid() . rand() . $foto["tmp_name"]). "." . $extensao;
+
+                // MOVER ARQUIVO PARA A PASTA "FOTOS"
+                // COM O NOVO NOME
+                move_uploaded_file($foto["tmp_name"], "fotos/$novo_nome");
+                $update_foto = "foto = '$novo_nome'";
+
+                $_SESSION["foto_usuario"]=$novo_nome;
+               
+            } else {
+                $_SESSION["tipo"] = "error";
+                $_SESSION["title"] = "ops!";
+                $_SESSION["msg"] = "arquivo de imagem NÃO permitido";
+                header("Location: ./");
+                exit;
+            }
+        } else {
+            $update_foto = "foto=foto";
+        }
 
         try {
             if (empty($senha)) {
                 $sql="
                 UPDATE usuarios  SET
                  nome = :nome,
-                email = :email
+                email = :email,
+                $update_foto 
                 WHERE pk_usuario = :pk_usuario
             ";
                 $stmt = $conn->prepare($sql);
@@ -36,8 +73,9 @@ if ($_POST) {
                 $sql = "
                 UPDATE usuarios  SET
                 nome = :nome,
-               email = :email
-               senha = :senha
+               email = :email,
+               senha = :senha,
+               $update_foto 
                WHERE pk_usuario = :pk_usuario
             ";
             $stmt = $conn->prepare($sql);
@@ -49,6 +87,11 @@ if ($_POST) {
             
             // EXECUTA O INSERT OU UPDATE ACIMA
             $stmt->execute();
+
+              $nome_usuario = explode(" ", $nome);
+              // CONCATENA O PRIMEIRO NOME COM O SOBRENOME DO USUARIO
+              $_SESSION["nome_usuario"] = $nome_usuario[0] ." " . end($nome_usuario);
+
 
             $_SESSION["tipo"] = 'success';
             $_SESSION["title"] = 'Oba!';
