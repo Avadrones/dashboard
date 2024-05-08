@@ -203,9 +203,16 @@ $pagina_ativa = "home";
       });
 <?php
 $sql = "
-SELECT COUNT(pk_ordem_servico) total,
-DATE_FORMAT(data_ordem_servico, '%m/%y') mesAno
-FROM ordens_servicos
+SELECT COUNT(pk_ordem_servico) total_os,
+DATE_FORMAT(data_ordem_servico, '%m/%y') mesAno,
+(
+  SELECT COUNT(pk_ordem_servico)
+  FROM ordens_servicos
+  WHERE DATE_FORMAT(data_ordem_servico, '%m/%y') =  DATE_FORMAT(a.data_ordem_servico, '%m/%y')
+  AND data_fim <> '0000-00-00'
+  ) total_concluidas
+FROM ordens_servicos a
+WHERE data_ordem_servico >= DATE_SUB(data_ordem_servico, INTERVAL 1 YEAR)
 GROUP BY DATE_FORMAT(data_ordem_servico, '%m/%y')
 ORDER BY data_ordem_servico
 ";
@@ -214,14 +221,24 @@ try {
   $stmt = $conn->prepare($sql);
   $stmt->execute();
   $dados = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+  $meses = array();
+  $total_os = array();
+  $total_concluidas = array();
+  foreach ($dados as $key => $row) {
+    array_push($meses,"'$row->mesAno'" );
+    array_push($total_os,$row->total_os);
+    array_push($total_concluidas,$row->total_concluidas);
+
+  }
 } catch (PDOException $e) {
   echo "console.log('". $e->getMessage() ."');";
 }
 ?>
+
       var areaChartData = {
-      labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
+      labels  : [<?php echo implode(",", $meses);?>],
+      datasets: [{     
           label               : 'O.S. Concluidas',
           backgroundColor     : 'rgba(60,141,188,0.9)',
           borderColor         : 'rgba(60,141,188,0.8)',
@@ -230,7 +247,7 @@ try {
           pointStrokeColor    : 'rgba(60,141,188,1)',
           pointHighlightFill  : '#fff',
           pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : [28, 48, 40, 19, 86, 27, 90]
+          data                : [<?php echo implode(",",$total_concluidas);?>]
         },
         {
           label               : 'O.S Total',
@@ -241,7 +258,7 @@ try {
           pointStrokeColor    : '#c1c7d1',
           pointHighlightFill  : '#fff',
           pointHighlightStroke: 'rgba(220,220,220,1)',
-          data                : [65, 59, 80, 81, 56, 55, 40]
+          data                : [<?php echo implode(",",$total_os);?>]
         },
       ]
     }
