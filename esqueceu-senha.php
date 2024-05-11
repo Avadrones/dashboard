@@ -28,7 +28,7 @@
 
                 <form action="recuperar-senha.php" method="post">
                     <div class="input-group mb-3">
-                        <input required type="email" class="form-control" placeholder="E-mail">
+                        <input required type="email" class="form-control" placeholder="E-mail" name="email">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>

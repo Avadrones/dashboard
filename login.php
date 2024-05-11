@@ -80,7 +80,7 @@ if(empty($_COOKIE["email"]) || empty($_COOKIE["senha"])) {
       <!-- /.social-auth-links -->
 
       <p class="mb-1">
-        <a href="forgot-password.html">Esqueceu a senha?</a>
+        <a href="esqueceu-senha.php">Esqueceu a senha?</a>
       </p>
     </div>
     <!-- /.card-body -->
